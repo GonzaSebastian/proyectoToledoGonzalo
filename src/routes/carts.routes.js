@@ -10,6 +10,9 @@ cartsRouter.get("/", async (req, res) => {
 
 cartsRouter.get("/:id", async (req, res) => {
   let id = req.params.id
+  
+  let cartFind = await carts.getCartById(id)
+  if (!cartFind) return res.status(404).send(`Cart ID "${id}" Not Found`)
   res.status(200).send(await carts.getCartById(id))
 })
 

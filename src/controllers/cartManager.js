@@ -32,7 +32,7 @@ export default class cartManager {
   getCartById = async(id) => {
     let cartById = await this.findCart(id)
     if (cartById) return cartById
-      return `Cart ID "${id}" Not Found`
+      return undefined
   }
 
   addProductInCart = async(cartId, productId) => {
@@ -49,14 +49,11 @@ export default class cartManager {
     if (cartById.products.some((i) => i.id === productId)) {
       let productInCart = cartById.products.find((i) => i.id === productId)
       productInCart.quantity++
-      // let cartsConcat = [cartById, ...cartFilter]
       await this.writeCarts(cartConcat)
       return cartConcat
     }
 
     cartById.products.push({id : productById.id, quantity: 1})
-
-    // let cartConcat =  [cartById, ...cartFilter]
 
     await this.writeCarts(cartConcat)
     return cartConcat

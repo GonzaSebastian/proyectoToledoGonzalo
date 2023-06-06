@@ -18,17 +18,26 @@ productRouter.get("/", async (req, res) => {
 
 productRouter.get("/:id", async (req, res) => {
   let id = req.params.id
+
+  let productFind = await product.getProductById(id)
+  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
   res.status(200).send(await product.getProductById(id))
 })
 
 productRouter.put("/:id", async (req, res) => {
   let id = req.params.id
   let update = req.body
+
+  let productFind = await product.updateProduct(id)
+  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
   res.status(200).send(await product.updateProduct(id, update))
 })
 
 productRouter.delete("/:id", async (req, res) => {
   let id = req.params.id
+
+  let productFind = await product.deleteProduct(id)
+  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
   res.status(200).send(await product.deleteProduct(id))
 })
 

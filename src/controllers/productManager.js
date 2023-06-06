@@ -20,34 +20,29 @@ export default class productManager {
   getProductById = async(id) => {
     let productFilter = await this.findProduct(id)
     if (productFilter) return productFilter
-      return `ID "${id}" Not Found`
+      return undefined
   }
 
   updateProduct = async(id, update) => {
     let product = await this.findProduct(id)
 
-    if (!product) return `ID "${id}" Not Found`
+    if (!product) return undefined
     await this.deleteProduct(id)
     let productsOld = await this.getProducts()
-    let productUpdate = [{...update, id : id}, ...productsOld]
-    await this.writeProducts(productUpdate)
-    return productUpdate;
+    let productsUpdate = [{...update, id : id}, ...productsOld]
+    await this.writeProducts(productsUpdate)
+    return productsUpdate;
     
   }
 
   deleteProduct = async(id) => {
     let content = await this.getProducts()
     let product = content.some(i => i.id === id)
+    let updateProducts = content.filter(i => i.id != id)
 
-    if (product) {
-      let productsUpdate = content.filter(i => i.id != id)
-      await this.writeProducts(productsUpdate)
-      return productsUpdate
-    } else {
-      return `ID "${id}" Not Found`
-    }
-
-    
+    if (!product) return undefined
+    await this.writeProducts(updateProducts)
+    return updateProducts
   }
   
   addProduct = async(product) => {
