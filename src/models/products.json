@@ -5,16 +5,7 @@
 		"price": 1,
 		"thumbnail": "Sin imagen",
 		"code": "abc1",
-		"stock": 14,
+		"stock": 1,
 		"id": "oqD9FerTOG"
-	},
-	{
-		"title": "product2",
-		"description": "Este es un producto prueba 2",
-		"price": 2,
-		"thumbnail": "Sin imagen",
-		"code": "abc2",
-		"stock": 20,
-		"id": "b5zR7yZilb"
 	}
 ]
