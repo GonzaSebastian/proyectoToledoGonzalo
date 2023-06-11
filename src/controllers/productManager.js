@@ -25,14 +25,20 @@ export default class productManager {
 
   updateProduct = async(id, update) => {
     let product = await this.findProduct(id)
+    let propUpdate = {...update}
+    let productNew = {...product, ...update}
+    if (propUpdate.thumbnail) {
+      let thumbnailProp = propUpdate.thumbnail
+      product.thumbnail.push(thumbnailProp)
+      productNew.thumbnail = product.thumbnail
+    }
 
     if (!product) return undefined
     await this.deleteProduct(id)
     let productsOld = await this.getProducts()
-    let productsUpdate = [{...update, id : id}, ...productsOld]
+    let productsUpdate = [{...productNew, id : id}, ...productsOld]
     await this.writeProducts(productsUpdate)
     return productsUpdate;
-    
   }
 
   deleteProduct = async(id) => {
@@ -47,8 +53,13 @@ export default class productManager {
   
   addProduct = async(product) => {
     let productsOld = await this.getProducts()
-    product.id = nanoid(10)
-    let productAdd = [...productsOld, product]
+    if (!product.title || !product.description || !product.price || !product.code || !product.stock) return 'Complete todos los campos'
+    if (!product.thumbnail) {
+      product.thumbnail = []
+    } else {
+      product.thumbnail = [product.thumbnail]
+    }
+    let productAdd = [...productsOld, {id: nanoid(5), status: true, ...product}]
     await this.writeProducts(productAdd)
 
     return "Product create"
