@@ -1,0 +1,20 @@
+<h2>Products</h2>
+<hr />
+<table class="table table-striped">
+  <thead>
+    <td><strong>Producto</strong></td>
+    <td><strong>Descripción</strong></td>
+    <td><strong>Precio</strong></td>
+    <td><strong>Código</strong></td>
+    <td><strong>Stock</strong></td>
+  </thead>
+  {{#each products}}
+    <tr>
+      <td>{{this.title}}</td>
+      <td>{{this.description}}</td>
+      <td>{{this.price}}</td>
+      <td>{{this.code}}</td>
+      <td>{{this.stock}}</td>
+    </tr>
+  {{/each}}
+</table>
