@@ -54,5 +54,17 @@
 		],
 		"code": "abc5",
 		"stock": 5
+	},
+	{
+		"id": "sXTg3",
+		"status": true,
+		"title": "product6",
+		"description": "Este es un producto prueba 6",
+		"price": 6,
+		"thumbnail": [
+			"Sin imagen"
+		],
+		"code": "abc6",
+		"stock": 6
 	}
 ]
