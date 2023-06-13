@@ -47,8 +47,10 @@ export default class productManager {
     let updateProducts = content.filter(i => i.id != id)
 
     if (!product) return undefined
-    await this.writeProducts(updateProducts)
-    return updateProducts
+    else {
+      await this.writeProducts(updateProducts)
+      return updateProducts
+    }
   }
   
   addProduct = async(product) => {
@@ -59,9 +61,10 @@ export default class productManager {
     } else {
       product.thumbnail = [product.thumbnail]
     }
-    let productAdd = [...productsOld, {id: nanoid(5), status: true, ...product}]
+    let productNew = {id: nanoid(5), status: true, ...product}
+    let productAdd = [...productsOld, productNew]
     await this.writeProducts(productAdd)
 
-    return "Product create"
+    return productNew
   }
 }

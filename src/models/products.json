@@ -44,27 +44,63 @@
 		"thumbnail": []
 	},
 	{
-		"id": "ELmjl",
+		"id": "Qa6zb",
 		"status": true,
-		"title": "product5",
-		"description": "Este es un producto prueba 5",
-		"price": 5,
+		"title": "1",
+		"description": "1",
+		"price": "1",
 		"thumbnail": [
-			"Sin imagen"
+			"1"
 		],
-		"code": "abc5",
-		"stock": 5
+		"code": "1",
+		"stock": "1"
 	},
 	{
-		"id": "sXTg3",
+		"id": "d2KDA",
 		"status": true,
-		"title": "product6",
-		"description": "Este es un producto prueba 6",
-		"price": 6,
+		"title": "2",
+		"description": "2",
+		"price": "2",
 		"thumbnail": [
-			"Sin imagen"
+			"2"
 		],
-		"code": "abc6",
-		"stock": 6
+		"code": "2",
+		"stock": "2"
+	},
+	{
+		"id": "kQDZq",
+		"status": true,
+		"title": "3",
+		"description": "3",
+		"price": "3",
+		"thumbnail": [
+			"3"
+		],
+		"code": "3",
+		"stock": "3"
+	},
+	{
+		"id": "-VmR5",
+		"status": true,
+		"title": "4",
+		"description": "4",
+		"price": "4",
+		"thumbnail": [
+			"4"
+		],
+		"code": "4",
+		"stock": "4"
+	},
+	{
+		"id": "zOeBh",
+		"status": true,
+		"title": "5",
+		"description": "5",
+		"price": "5",
+		"thumbnail": [
+			"5"
+		],
+		"code": "5",
+		"stock": "5"
 	}
 ]

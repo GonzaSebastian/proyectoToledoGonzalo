@@ -1,8 +1,6 @@
 import { Router } from "express";
 import productManager from "../controllers/productManager.js";
 
-// const socket = io()
-
 const viewsRouter = Router()
 
 const product = new productManager("./src/models/products.json")
@@ -18,7 +16,7 @@ viewsRouter.get("/", async(req, res) => {
 viewsRouter.get("/realtimeproducts", async(req, res) => {
   let allProducts = await product.getProducts()
   res.render("realTimeProducts", {
-    title: "Productos",
+    title: "Productos RealTime",
     products: allProducts
   })
 })
