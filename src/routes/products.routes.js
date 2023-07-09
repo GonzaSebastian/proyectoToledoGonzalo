@@ -6,14 +6,16 @@ const productRouter = Router()
 const product = new productManager("./src/models/products.json")
 
 productRouter.post("/", async (req, res) => {
-  let newProduct = req.body
-
-  res.send(await product.addProduct(newProduct))
+  const newProduct = req.body
+  const result = await product.addProduct(newProduct)
+  const products = await product.getProducts()
+  req.io.emit('updateProducts', products) 
+  res.json(result)
 })
 
 productRouter.get("/", async (req, res) => {
   const getProducts = await product.getProducts()
-  res.status(200).send(getProducts)
+  res.status(200).json(getProducts)
 })
 
 productRouter.get("/:id", async (req, res) => {
@@ -33,12 +35,12 @@ productRouter.put("/:id", async (req, res) => {
   res.status(200).send(await product.updateProduct(id, update))
 })
 
-productRouter.delete("/:id", async (req, res) => {
-  let id = req.params.id
-
+productRouter.delete("/:pid", async (req, res) => {
+  let id = req.params.pid
   let productFind = await product.deleteProduct(id)
   if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
-  res.status(200).send(await product.deleteProduct(id))
+  req.io.emit('updateProducts', productFind) 
+  res.status(200).json(await product.deleteProduct(id))
 })
 
 export default productRouter

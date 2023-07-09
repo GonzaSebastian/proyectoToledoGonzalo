@@ -17,7 +17,7 @@ document.getElementById('createBtn').addEventListener('click', () => {
     headers: {
       'Content-Type': 'application/json'
     },
-  })
+    })
     .then(result => result.json())
     .then(result => {
       if(result.status ==='error') throw new Error(result.error)
@@ -67,13 +67,13 @@ socket.on('updateProducts', data => {
       let tr = document.createElement('tr')
       tr.innerHTML =
       ` 
-        <td><button class="btn btn-danger" onclick="deleteProduct(${product.id})">Eliminar</button></td>
+        <td><button class="btn btn-danger" onclick="deleteProduct("${product.id}")">Eliminar</button></td>
         <td>${product.title}</td>
         <td>${product.description}</td>
         <td>${product.price}</td>
         <td>${product.code}</td>
         <td>${product.stock}</td>
       `
-      table.getElementsByTagName('tbody')[0].appendChild(tr)
+      table.getElementsByTagName('tbody')[0].appendChild(tr);
     }
 })
