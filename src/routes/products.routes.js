@@ -1,46 +1,71 @@
 import { Router } from "express";
 import productManager from "../controllers/productManager.js";
+// import { productModel } from "../models/product.model.js";
 
 const productRouter = Router()
 
-const product = new productManager("./src/models/products.json")
+let product = new productManager()
+
+productRouter.get('/', async (req, res) => {
+  try {
+    const products = await product.getProducts()
+    res.status(200).json({ status: 'success', payload: products })
+  } catch(err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
+})
+
+productRouter.get("/:pid", async (req, res) => {
+  try {
+   let id = req.params.pid
+   let productFind = await product.getProductById(id)
+   res.status(200).json(productFind)
+  } catch(err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
+})
 
 productRouter.post("/", async (req, res) => {
-  const newProduct = req.body
-  const result = await product.addProduct(newProduct)
-  const products = await product.getProducts()
-  req.io.emit('updateProducts', products) 
-  res.json(result)
-})
+  try {
+    const productCreate = req.body
+    const result = await product.addProduct(productCreate)
+    const products = await product.getProducts()
 
-productRouter.get("/", async (req, res) => {
-  const getProducts = await product.getProducts()
-  res.status(200).json(getProducts)
-})
-
-productRouter.get("/:id", async (req, res) => {
-  let id = req.params.id
-
-  let productFind = await product.getProductById(id)
-  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
-  res.status(200).send(await product.getProductById(id))
-})
-
-productRouter.put("/:id", async (req, res) => {
-  let id = req.params.id
-  let update = req.body
-
-  let productFind = await product.updateProduct(id)
-  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
-  res.status(200).send(await product.updateProduct(id, update))
+    req.io.emit('updateProducts', products) 
+    res.json({ status: 'success', payload: result })
+  } catch(err) {
+    // REVISAR STATUS
+    res.status(404).json({ status: 'error', error: err.message })
+  }
 })
 
 productRouter.delete("/:pid", async (req, res) => {
-  let id = req.params.pid
-  let productFind = await product.deleteProduct(id)
-  if (!productFind) return res.status(404).send(`Product "${id}" Not Found`)
-  req.io.emit('updateProducts', productFind) 
-  res.status(200).json(await product.deleteProduct(id))
+  try {
+    let id = req.params.pid
+    let productFind = await product.deleteProduct(id)
+    const products = await product.getProducts()
+    req.io.emit('updateProducts', products) 
+    res.status(200).json({ status: 'success', payload: productFind })
+  } catch (err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
+
 })
+
+productRouter.put("/:pid", async (req, res) => {
+  try {
+    let id = req.params.pid
+    let update = req.body
+    let productFind = await product.updateProduct(id, update)
+    let products = await product.getProducts()
+    req.io.emit('updateProducts', products) 
+    res.status(200).json({ status: 'success', payload: products })
+    
+  } catch(err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
+})
+
+
 
 export default productRouter
