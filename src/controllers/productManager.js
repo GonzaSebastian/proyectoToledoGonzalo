@@ -27,52 +27,22 @@ export default class productManager {
     return productFilter
   }
   updateProduct = async(id, update) => {
-    let product = await productModel.updateOne({_id:id}, update)
+    let product = await productModel.updateOne(
+      {_id:id}, 
+      {
+        $push: {thumbnail: update.thumbnail},
+        title: update.title,
+        description: update.description,
+        price: update.price,
+        code: update.code,
+        stock: update.stock
+      },
+      
+    )
     if (product.modifiedCount == 0) return undefined
     else return product
-  //   let propUpdate = {...update}
-  //   let productNew = {...product, ...update}
-  //   if (propUpdate.thumbnail) {
-  //     let thumbnailProp = propUpdate.thumbnail
-  //     product.thumbnail.push(thumbnailProp)
-  //     productNew.thumbnail = product.thumbnail
-  //   }
-  //   if (!product) return undefined
-  //   await this.deleteProduct(id)
-  //   let productsOld = await this.getProducts()
-  //   let productsUpdate = [{...productNew, id : id}, ...productsOld]
-  //   return productsUpdate;
   }
 }
 
 
 
-// export default class productManager {
-
-//   constructor(path) {
-//     this.path = path
-//   }
-//   getProducts = async() => JSON.parse(await fs.promises.readFile(this.path, "utf-8"))
-  
-//   findProduct = async(id) => {
-//     let content = await this.getProducts()
-//     return content.find(i => i.id === id)
-//   }
-
-//   writeProducts = async(product) => {
-//     await fs.promises.writeFile(this.path, JSON.stringify(product, null, '\t'))
-//   }
-
-//   getProductById = async(id) => {
-//     let productFilter = await this.findProduct(id)
-//     if (productFilter) return productFilter
-//       return undefined
-//   }
-
-
-
-
-//   }
-  
-
-// }
