@@ -1,6 +1,5 @@
 import { Router } from "express";
 import productManager from "../controllers/productManager.js";
-// import { productModel } from "../models/product.model.js";
 
 const productRouter = Router()
 
@@ -9,7 +8,8 @@ let product = new productManager()
 productRouter.get('/', async (req, res) => {
   try {
     const products = await product.getProducts()
-    res.status(200).json({ status: 'success', payload: products })
+    const {docs, ...rest} = products
+    res.status(200).json({ status: 'success', payload: docs, ...rest })
   } catch(err) {
     res.status(404).json({ status: 'error', error: err.message })
   }

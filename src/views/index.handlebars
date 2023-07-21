@@ -4,17 +4,27 @@
   <thead>
     <td><strong>Producto</strong></td>
     <td><strong>Descripción</strong></td>
+    <td><strong>Categoria</strong></td>
     <td><strong>Precio</strong></td>
     <td><strong>Código</strong></td>
     <td><strong>Stock</strong></td>
   </thead>
-  {{#each products}}
+  {{#each products.docs}}
     <tr>
       <td>{{this.title}}</td>
       <td>{{this.description}}</td>
+      <td>{{this.category}}</td>
       <td>{{this.price}}</td>
       <td>{{this.code}}</td>
       <td>{{this.stock}}</td>
     </tr>
   {{/each}}
 </table>
+<div>
+  {{#if products.hasPrevPage}}
+        <a href="{{products.prevLink}}">Anterior</a>
+  {{/if}}  
+  {{#if products.hasNextPage}}
+    <a href="{{products.nextLink}}">Siguiente</a>
+  {{/if}}
+</div>

@@ -3,6 +3,7 @@
 <form id="createForm">
   <div class="m-2">Title:<input type="text" id="title"></div>
   <div class="m-2">Description:<input type="text" id="description"></div>
+  <div class="m-2">Categoria:<input type="text" id="category"></div>
   <div class="m-2">Price:<input type="text" id="price"></div>
   <div class="m-2">Thumbnail:<input type="text" id="thumbnail"></div>
   <div class="m-2">Code:<input type="text" id="code"></div>
@@ -17,16 +18,18 @@
     <td></td>
     <td><strong>Producto</strong></td>
     <td><strong>Descripción</strong></td>
+    <td><strong>Categoria</strong></td>
     <td><strong>Precio</strong></td>
     <td><strong>Código</strong></td>
     <td><strong>Stock</strong></td>
   </thead>
   <tbody>
-  {{#each products}}
+  {{#each products.docs}}
     <tr>
       <td><button class="btn btn-danger" onclick="deleteProduct(`{{this._id}}`)">Eliminar</button></td> 
       <td>{{this.title}}</td>
       <td>{{this.description}}</td>
+      <td>{{this.category}}</td>
       <td>{{this.price}}</td>
       <td>{{this.code}}</td>
       <td>{{this.stock}}</td>

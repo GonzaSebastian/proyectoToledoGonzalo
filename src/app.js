@@ -12,7 +12,7 @@ let io = undefined
 let serverHTTP = undefined
 
 try {
-  await mongoose.connect('mongodb+srv://coder:coder@cluster0.dx5fecx.mongodb.net/appToledo')
+  await mongoose.connect('mongodb+srv://coder:coder@cluster0.dx5fecx.mongodb.net/dbToledo')
   serverHTTP = app.listen(PORT, () => console.log(`Server Up ${PORT}`))
   io = new Server(serverHTTP)
 
