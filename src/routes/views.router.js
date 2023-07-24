@@ -15,8 +15,8 @@ viewsRouter.get("/", async(req, res) => {
 
   result.prevLink = result.hasPrevPage ? `?page=${result.prevPage}` : ''
   result.nextLink = result.hasNextPage ? `?page=${result.nextPage}` : ''
-
-  res.render("index", {
+  
+  res.render("products", {
     title: "Productos",
     products: result
   })

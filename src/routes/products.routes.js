@@ -34,7 +34,6 @@ productRouter.post("/", async (req, res) => {
     req.io.emit('updateProducts', products) 
     res.json({ status: 'success', payload: result })
   } catch(err) {
-    // REVISAR STATUS
     res.status(404).json({ status: 'error', error: err.message })
   }
 })
@@ -65,7 +64,5 @@ productRouter.put("/:pid", async (req, res) => {
     res.status(404).json({ status: 'error', error: err.message })
   }
 })
-
-
 
 export default productRouter

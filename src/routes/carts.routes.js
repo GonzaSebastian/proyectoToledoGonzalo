@@ -2,29 +2,57 @@ import { Router } from "express";
 import cartManager from "../controllers/cartManager.js";
 
 const cartsRouter = Router()
-const carts = new cartManager("./src/models/carts.json")
+const carts = new cartManager()
 
 cartsRouter.get("/", async (req, res) => {
-  res.status(200).send(await carts.getCart())
-})
-
-cartsRouter.get("/:id", async (req, res) => {
-  let id = req.params.id
-  
-  let cartFind = await carts.getCartById(id)
-  if (!cartFind) return res.status(404).send(`Cart ID "${id}" Not Found`)
-  res.status(200).send(await carts.getCartById(id))
+  try {
+    res.status(200).json({ status: 'success', payload: await carts.getCart() })
+  } catch(err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
 })
 
 cartsRouter.post("/", async (req, res) => {
-  res.status(200).send(await carts.addCart())
+  try {
+    await carts.addCart()
+    res.status(200).json({ status: 'success', mesagge: 'Cart created successfully' })
+  } catch(err) {
+    res.status(404).json({ status: 'error', error: err.message })
+  }
 })
 
 cartsRouter.post("/:cid/products/:pid", async (req, res) => {
   let cartId = req.params.cid
   let productId = req.params.pid
 
-  res.status(200).send(await carts.addProductInCart(cartId, productId))
+  res.status(200).json(await carts.addProductInCart(cartId, productId))
+})
+
+cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
+  let cartId = req.params.cid
+  let productId = req.params.pid
+
+  res.status(200).json(await carts.deleteProductInCart(cartId, productId))
+})
+
+cartsRouter.delete("/:cid", async (req, res) => {
+  let cartId = req.params.cid
+
+  res.status(200).json(await carts.cleanCart(cartId))
+})
+
+cartsRouter.put("/:cid/products/:pid", async (req, res) => {
+  try {
+    let cartId = req.params.cid
+    let productId = req.params.pid
+    let newQuantity = req.body.quantity
+    const productNewQuant = await carts.updateQuantityProduct(cartId, productId, newQuantity)
+
+    res.status(200).json({status: 'success', payload: productNewQuant})
+  } catch(err) {
+    res.status(404).json({status: 'error', error: err.message})
+  }
+
 })
 
 export default cartsRouter
