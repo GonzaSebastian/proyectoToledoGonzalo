@@ -1,0 +1,15 @@
+<h2>Carrito:</h2>
+<hr />
+<table class="table table-striped">
+  <thead>
+    <td><strong>Producto</strong></td>
+    <td><strong>Cantidad</strong></td>
+    <td></td>
+  </thead>
+  {{#each cart.products}}
+    <tr>
+      <td>{{this.product.title}}</td>
+      <td>{{this.quantity}}</td>
+    </tr>
+  {{/each}}
+</table>

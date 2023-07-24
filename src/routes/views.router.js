@@ -1,9 +1,11 @@
 import { Router } from "express";
 import productManager from "../controllers/productManager.js";
+import cartManager from "../controllers/cartManager.js";
 
 const viewsRouter = Router()
 
 const product = new productManager()
+const cart = new cartManager()
 
 viewsRouter.get("/", async(req, res) => {
   let page = parseInt(req.query.page) 
@@ -19,6 +21,15 @@ viewsRouter.get("/", async(req, res) => {
   res.render("products", {
     title: "Productos",
     products: result
+  })
+})
+
+viewsRouter.get("/cart/:cid", async(req, res) => {
+  const cartId = req.params.cid
+  let cartView = await cart.getCartById(cartId)
+  res.render("cart", {
+    title: "Carrito",
+    cart: cartView
   })
 })
 

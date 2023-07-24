@@ -10,6 +10,11 @@ export default class cartManager {
     return carts;
   }
 
+  getCartById = async(cartId) => {
+  const cart = await cartModel.findOne({_id:cartId}).lean().populate('products.product')
+    return cart;;
+  }
+
   addCart = async() => {
      await cartModel.create({product:[]})
   }
