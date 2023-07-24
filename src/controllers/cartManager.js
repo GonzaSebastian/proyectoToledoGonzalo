@@ -65,27 +65,5 @@ export default class cartManager {
     await cartModel.updateOne({_id: cartId}, cart)
     return cart
   }
-  // getCart = async() => JSON.parse(await fs.promises.readFile(this.path, "utf-8"))
-
-  // findCart = async(id) => {
-  //   let content = await this.getCart()
-  //   return content.find(i => i.id === id)
-  // }
-  
-
-
-  // addCart = async() => {
-  //   let cartsConcat = [{products : []}]
-  //   await this.writeCarts(cartsConcat)
-
-  //   return cartsConcat
-  // }
-
-  // getCartById = async(id) => {
-  //   let cartById = await this.findCart(id)
-  //   if (cartById) return cartById
-  //     return undefined
-  // }
-
 
 }
