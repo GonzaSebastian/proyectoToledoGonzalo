@@ -48,7 +48,7 @@ sessionsRouter.get('/logout', (req, res) => {
       if(err) {
           console.log(err);
           res.status(500).render('errors/base', {error: err})
-      } else res.redirect('/sessions/register')
+      } else res.redirect('/session/register')
   })
 })
 

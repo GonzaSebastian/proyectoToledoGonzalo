@@ -1,6 +1,7 @@
 const socket = io()
 const table = document.getElementById('productsTable')
 
+// /realtimeproducts FUNCTIONS
 document.getElementById('createBtn').addEventListener('click', () => {
   const body = {
     title: document.getElementById('title').value,

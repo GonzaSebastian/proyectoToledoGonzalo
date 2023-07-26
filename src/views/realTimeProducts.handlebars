@@ -1,3 +1,4 @@
+<h1>Administrador asignado: {{user.first_name}} {{user.last_name}}</h1>
 <h2>Real time products</h2>
 <hr />
 <form id="createForm">
@@ -37,6 +38,8 @@
   {{/each}}
   </tbody>
 </table>
+<button class="btn btn-secondary" onclick="logout()">Logout</button>
+
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/index.js"></script>
