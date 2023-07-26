@@ -30,6 +30,7 @@
     <a href="{{products.nextLink}}">Siguiente</a>
   {{/if}}
 </div>
+<a class="btn btn-secondary btn-sm disabled" role="button" aria-disabled="true" href="/logout">Logout</a>
 <script>
   addProductToCart = (pid) => {
   fetch(`/api/carts/64bc1dcc88d41704658a8670/products/${pid}`, {
