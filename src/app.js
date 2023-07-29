@@ -8,6 +8,9 @@ import { Server } from "socket.io"
 import mongoose from "mongoose"
 import session from "express-session";
 import MongoStore from "connect-mongo"
+import __dirname from "./utils.js"
+import passport from "passport"
+import initializePassport from "./config/passport.config.js"
 
 const app = express()
 const PORT = 8080
@@ -42,13 +45,17 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
-app.use(express.static('./src/public'))
+app.use(express.static(__dirname + '/public'))
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', './src/views')
+app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 app.use('/products', viewsRouter)

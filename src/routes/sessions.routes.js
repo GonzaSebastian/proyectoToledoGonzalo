@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 
 const sessionsRouter = Router()
 
@@ -12,15 +14,14 @@ sessionsRouter.get('/register', (req, res) => {
 })
 
 // API REGISTER
-sessionsRouter.post('/register',(req, res) => {
-  const newUser = req.body
-  if (newUser.email == 'adminCoder@coder.com' && newUser.password == 'coder') {
-    newUser.role = 'admin'
-  } else {
-    newUser.role = 'user'
-  }
-  req.session.user = newUser
+sessionsRouter.post('/register', passport.authenticate('register',{
+  failureRedirect: '/session/failRegister'
+}), async(req, res) => {
   res.redirect('/session/login') 
+})
+
+sessionsRouter.get('/failRegister', (req, res) =>{
+  res.send({error:'fail register'})
 })
 
 // VISTA LOGIN
@@ -29,20 +30,10 @@ sessionsRouter.get('/login', (req, res) => {
 })
 
 // API LOGIN
-sessionsRouter.post('/login', (req, res) => {
-  const userCookie = req.session.user
-  const {email, password} = req.body
-  if (email !== userCookie.email || password !== userCookie.password) {
-    res.redirect('/session/register')
-  } else {
-    if (userCookie.role == 'user') {
+sessionsRouter.post('/login', passport.authenticate('login', {failureRedirect: '/session/failLogin'}), async (req, res) =>{
       res.redirect('/products')
-    } else {
-      res.redirect('/products/realtimeproducts')
-    }
-  }
 })
-// API LOGOUT
+
 sessionsRouter.get('/logout', (req, res) => {
   req.session.destroy(err => {
       if(err) {
