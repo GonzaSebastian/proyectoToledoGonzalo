@@ -1,12 +1,36 @@
 import passport from "passport";
+import GitHubStrategy from "passport-github2"
 import local from "passport-local"
 import UserModel from "../models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
+import bcrypt from 'bcrypt'
 
 const LocalStrategy = local.Strategy
 
 
 const initializePassport = () => {
+  
+  passport.use('github', new GitHubStrategy({
+    clientID: 'Iv1.5e52163057bbe090',
+    clientSecret: '495ed70b268f0926f573189e5bb903ac4e81c0ef',
+    callbackURL: 'http://localhost:8080/session/githubLog'
+  }, async (accesToken, refreshToken, profile, done) => {
+    console.log(profile);
+    try {
+      const user = await UserModel.findOne({ email: profile._json.email })
+      if (user) return done(null, user)
+      const newUser = await UserModel.create({
+        first_name: profile._json.name,
+        last_name: profile._json.name,
+        age: 0,
+        email: profile._json.email,
+        password: " ",
+      })
+      return done(null, newUser)
+    } catch(err) {
+      return done(`Error to login with Github =>${err.message}`)
+    }
+  }))
 
   passport.use('register', new LocalStrategy({
     passReqToCallback: true,
@@ -22,6 +46,10 @@ const initializePassport = () => {
       const newUser = {
         first_name, last_name, email, age, password: createHash(password)
       }
+      if ( newUser.email == 'adminCoder@coder.com' && isValidPassword(newUser, 'admin' )) {
+        newUser.role = 'admin'
+      }
+      
       const result = await UserModel.create(newUser)
       return done(null, result)
     } catch(err) {
@@ -40,7 +68,7 @@ const initializePassport = () => {
       if (!isValidPassword(user, password)) return done(null, false)
       return done(null, user)
     } catch(err) {
-
+      return done('Error login')
     }
   }))
 

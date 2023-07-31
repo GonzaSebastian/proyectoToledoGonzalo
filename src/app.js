@@ -41,7 +41,7 @@ app.use(session({
       useUnifiedTopology: true
     }
   }),
-  secret: 'appCoder ',
+  secret: 'appCoder',
   resave: true,
   saveUninitialized: true
 }))

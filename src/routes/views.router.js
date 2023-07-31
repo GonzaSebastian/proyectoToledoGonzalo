@@ -1,6 +1,7 @@
 import { Router } from "express";
 import productManager from "../controllers/productManager.js";
 import cartManager from "../controllers/cartManager.js";
+import userModel from '../models/user.model.js'
 
 const viewsRouter = Router()
 
@@ -19,10 +20,12 @@ viewsRouter.get("/", async(req, res) => {
   result.prevLink = result.hasPrevPage ? `?page=${result.prevPage}` : ''
   result.nextLink = result.hasNextPage ? `?page=${result.nextPage}` : ''
   
+  const user = await userModel.findById(req.session?.passport?.user).lean().exec();
+
   res.render("products", {
     title: "Productos",
     products: result,
-    user: req.session.user
+    user: user
   })
 })
 
@@ -37,11 +40,11 @@ viewsRouter.get("/cart/:cid", async(req, res) => {
 
 viewsRouter.get("/realtimeproducts", async(req, res) => {
   let products = await product.getProducts()
-  const user = 
+  const user = await userModel.findById(req.session?.passport?.user).lean().exec();
   res.render("realTimeProducts", {
     title: "Productos RealTime",
     products: products,
-    user: req.session.user
+    user: user
   })
 })
 

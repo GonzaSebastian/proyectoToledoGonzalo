@@ -34,12 +34,19 @@ sessionsRouter.post('/login', passport.authenticate('login', {failureRedirect: '
       res.redirect('/products')
 })
 
+// API LOGIN GITHUB
+sessionsRouter.get('/github', passport.authenticate('github', {scope:['user:email']}), async(req, res) => {})
+sessionsRouter.get('/githubLog', passport.authenticate('github', {failureRedirect: '/login'}), async(req, res) => {
+  res.redirect('/products')
+})
+
+// LOGOUT
 sessionsRouter.get('/logout', (req, res) => {
   req.session.destroy(err => {
       if(err) {
           console.log(err);
           res.status(500).render('errors/base', {error: err})
-      } else res.redirect('/session/register')
+      } else res.redirect('/session/login')
   })
 })
 
