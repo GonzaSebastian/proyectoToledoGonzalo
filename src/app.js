@@ -61,7 +61,7 @@ app.set('view engine', 'handlebars')
 app.use('/products', viewsRouter)
 app.use("/api/products", productRouter)
 app.use("/api/carts", cartsRouter)
-app.use('/session', sessionsRouter)
+app.use('/api/session', sessionsRouter)
 
 
 io.on('connection', socket  => {

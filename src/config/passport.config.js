@@ -3,7 +3,6 @@ import GitHubStrategy from "passport-github2"
 import local from "passport-local"
 import UserModel from "../models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
-import bcrypt from 'bcrypt'
 
 const LocalStrategy = local.Strategy
 
@@ -26,6 +25,9 @@ const initializePassport = () => {
         email: profile._json.email,
         password: " ",
       })
+      if ( newUser.email == 'adminCoder@coder.com' ) {
+        newUser.role = 'admin'
+      }
       return done(null, newUser)
     } catch(err) {
       return done(`Error to login with Github =>${err.message}`)

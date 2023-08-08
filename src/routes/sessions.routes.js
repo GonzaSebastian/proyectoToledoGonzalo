@@ -34,6 +34,10 @@ sessionsRouter.post('/login', passport.authenticate('login', {failureRedirect: '
       res.redirect('/products')
 })
 
+sessionsRouter.get('/failLogin', (req, res) =>{
+  res.send({error:'fail login'})
+})
+
 // API LOGIN GITHUB
 sessionsRouter.get('/github', passport.authenticate('github', {scope:['user:email']}), async(req, res) => {})
 sessionsRouter.get('/githubLog', passport.authenticate('github', {failureRedirect: '/login'}), async(req, res) => {
@@ -55,11 +59,6 @@ sessionsRouter.get('/user/getpreference', (req, res) => {
   res.json(preference.location)
 })
 
-sessionsRouter.get('/user/deletepreference', (req, res) => {
-  req.session.destroy((err => {
-    if (err) return res.json({status: 'error', message: 'Ocurrio un error'})
-    return res.json({status: 'succes', message: 'Session eliminada'})
-  }))
-})
+
 
 export default sessionsRouter
