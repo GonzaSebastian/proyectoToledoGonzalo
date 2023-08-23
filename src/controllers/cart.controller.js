@@ -1,25 +1,20 @@
-import productManager from "./productManager.js"
-import { cartModel } from "../models/cart.model.js"
+import { cartModel } from "../dao/models/cart.model.js"
 
-const products = new productManager("./src/models/products.json")
-
-export default class cartManager {
-
-  getCart = async() => {
+  export const getCart = async() => {
     const carts = await cartModel.find()
     return carts;
   }
 
-  getCartById = async(cartId) => {
+  export const getCartById = async(cartId) => {
   const cart = await cartModel.findOne({_id:cartId}).lean().populate('products.product')
     return cart;;
   }
 
-  addCart = async() => {
+  export const addCart = async() => {
      await cartModel.create({product:[]})
   }
 
-  addProductInCart = async (cartId, productId) => {
+  export const addProductInCart = async (cartId, productId) => {
 
     const cart = await cartModel.findOne({_id: cartId})
     const productIndex = cart.products.findIndex(
@@ -37,7 +32,7 @@ export default class cartManager {
     return cart;
   }
 
-  deleteProductInCart = async (cartId, productId) => {
+  export const deleteProductInCart = async (cartId, productId) => {
     const cart = await cartModel.findOne({_id: cartId})
     const productsFilter = cart.products.findIndex(i => i.product.toString() == productId)
     if (cart && productsFilter !== -1) {
@@ -49,14 +44,14 @@ export default class cartManager {
     }
   }
 
-  cleanCart = async (cartId) => {
+  export const cleanCart = async (cartId) => {
     const cart = await cartModel.findOne({_id: cartId})
     cart.products.splice([])
     await cartModel.updateOne({_id: cartId}, cart)
     return cart
   }
 
-  updateQuantityProduct = async (cartId, productId, newQuantity) => {
+  export const updateQuantityProduct = async (cartId, productId, newQuantity) => {
     const cart = await cartModel.findOne({_id: cartId})
     if (!cart) return console.error(err.message)
     const productIndex = cart.products.findIndex(i => i.product.toString() == productId)
@@ -65,5 +60,3 @@ export default class cartManager {
     await cartModel.updateOne({_id: cartId}, cart)
     return cart
   }
-
-}

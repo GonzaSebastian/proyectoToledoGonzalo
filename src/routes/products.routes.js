@@ -1,13 +1,11 @@
 import { Router } from "express";
-import productManager from "../controllers/productManager.js";
+import {getProducts, getProductById, deleteProduct, addProduct} from "../controllers/product.controller.js";
 
 const productRouter = Router()
 
-let product = new productManager()
-
 productRouter.get('/', async (req, res) => {
   try {
-    const products = await product.getProducts()
+    const products = await getProducts()
     const {docs, ...rest} = products
     res.status(200).json({ status: 'success', payload: docs, ...rest })
   } catch(err) {
@@ -18,7 +16,7 @@ productRouter.get('/', async (req, res) => {
 productRouter.get("/:pid", async (req, res) => {
   try {
    let id = req.params.pid
-   let productFind = await product.getProductById(id)
+   let productFind = await getProductById(id)
    res.status(200).json(productFind)
   } catch(err) {
     res.status(404).json({ status: 'error', error: err.message })
@@ -28,8 +26,8 @@ productRouter.get("/:pid", async (req, res) => {
 productRouter.post("/", async (req, res) => {
   try {
     const productCreate = req.body
-    const result = await product.addProduct(productCreate)
-    const products = await product.getProducts()
+    const result = await addProduct(productCreate)
+    const products = await getProducts()
 
     req.io.emit('updateProducts', products) 
     res.json({ status: 'success', payload: result })
@@ -41,8 +39,8 @@ productRouter.post("/", async (req, res) => {
 productRouter.delete("/:pid", async (req, res) => {
   try {
     let id = req.params.pid
-    let productFind = await product.deleteProduct(id)
-    const products = await product.getProducts()
+    let productFind = await deleteProduct(id)
+    const products = await getProducts()
     req.io.emit('updateProducts', products) 
     res.status(200).json({ status: 'success', payload: productFind })
   } catch (err) {

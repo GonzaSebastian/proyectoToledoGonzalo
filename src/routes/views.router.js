@@ -1,12 +1,9 @@
 import { Router } from "express";
-import productManager from "../controllers/productManager.js";
-import cartManager from "../controllers/cartManager.js";
-import userModel from '../models/user.model.js'
+import { getProducts, getProductById, deleteProduct} from "../controllers/product.controller.js";
+// import cartManager from "../controllers/cart.controller.js";
+import userModel from '../dao/models/user.model.js'
 
 const viewsRouter = Router()
-
-const product = new productManager()
-const cart = new cartManager()
 
 viewsRouter.get("/", async(req, res) => {
   let page = parseInt(req.query.page) 
@@ -15,7 +12,7 @@ viewsRouter.get("/", async(req, res) => {
   let category = req.query.category
   let sort = req.query.sort
   
-  let result = await product.getProducts(page, limit, stock, category, sort)
+  let result = await getProducts(page, limit, stock, category, sort)
   
   result.prevLink = result.hasPrevPage ? `?page=${result.prevPage}` : ''
   result.nextLink = result.hasNextPage ? `?page=${result.nextPage}` : ''
@@ -39,7 +36,7 @@ viewsRouter.get("/cart/:cid", async(req, res) => {
 })
 
 viewsRouter.get("/realtimeproducts", async(req, res) => {
-  let products = await product.getProducts()
+  let products = await getProducts()
   const user = await userModel.findById(req.session?.passport?.user).lean().exec();
   res.render("realTimeProducts", {
     title: "Productos RealTime",
