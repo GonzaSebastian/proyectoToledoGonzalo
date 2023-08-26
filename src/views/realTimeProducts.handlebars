@@ -38,8 +38,16 @@
   {{/each}}
   </tbody>
 </table>
+<div>
+  {{#if products.hasPrevPage}}
+    <a href="{{products.prevLink}}">Anterior</a>
+  {{/if}}  
+  {{#if products.hasNextPage}}
+    <a href="{{products.nextLink}}">Siguiente</a>
+  {{/if}}
+</div>
 <button class="btn btn-secondary" onclick="logout()">Logout</button>
 
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/index.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

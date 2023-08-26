@@ -67,7 +67,7 @@ app.use('/api/session', sessionsRouter)
 io.on('connection', socket  => {
   console.log("New client connected");
   socket.on('productList', data => {
-    io.emit('updateProducts', data.payload)
+    io.emit('updateProducts', data.payload.docs)
   })
 })
 
