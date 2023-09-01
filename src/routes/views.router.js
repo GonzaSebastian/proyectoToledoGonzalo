@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { viewsGetProducts, viewsGetProductsRealTime, viewsCart } from "../controllers/views.controller.js";
 
-
 const viewsRouter = Router()
 
 viewsRouter.get("/", viewsGetProducts)

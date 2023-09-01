@@ -1,64 +1,37 @@
 import { Router } from "express";
-import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
+import { sessionFailLoginController, sessionFailRegister, sessionLoginController, sessionLogoutController, sessionRegisterController, sessionRootController } from "../controllers/sessions.controller.js";
 
 const sessionsRouter = Router()
 
-sessionsRouter.get('/', (req, res) => {
-  res.json({status: 'succes', message: 'Route /sessions'})
-})
+sessionsRouter.get('/', sessionRootController)
 
 // VISTA REGISTER
-sessionsRouter.get('/register', (req, res) => {
-  res.render('session/register')
-})
+sessionsRouter.get('/register', sessionRegisterController)
 
-// API REGISTER
-sessionsRouter.post('/register', passport.authenticate('register',{
-  failureRedirect: '/session/failRegister'
-}), async(req, res) => {
-  res.redirect('/session/login') 
-})
+sessionsRouter.post('/register', passport.authenticate('register', {successRedirect: '/api/session/login', failureRedirect: '/api/session/register'}))
 
-sessionsRouter.get('/failRegister', (req, res) =>{
-  res.send({error:'fail register'})
-})
+sessionsRouter.get('/failRegister', sessionFailRegister)
 
 // VISTA LOGIN
-sessionsRouter.get('/login', (req, res) => {
-  res.render('session/login')
-})
+sessionsRouter.get('/login', sessionLoginController)
 
 // API LOGIN
-sessionsRouter.post('/login', passport.authenticate('login', {failureRedirect: '/session/failLogin'}), async (req, res) =>{
-      res.redirect('/products')
-})
+sessionsRouter.post('/login', passport.authenticate('login', {successRedirect: '/products', failureRedirect: '/session/failLogin'}))
 
-sessionsRouter.get('/failLogin', (req, res) =>{
-  res.send({error:'fail login'})
-})
+sessionsRouter.get('/failLogin', sessionFailLoginController)
 
 // API LOGIN GITHUB
 sessionsRouter.get('/github', passport.authenticate('github', {scope:['user:email']}), async(req, res) => {})
-sessionsRouter.get('/githubLog', passport.authenticate('github', {failureRedirect: '/login'}), async(req, res) => {
-  res.redirect('/products')
-})
+sessionsRouter.get('/githubLog', passport.authenticate('github', {successRedirect: '/products', failureRedirect: '/login'}))
 
 // LOGOUT
-sessionsRouter.get('/logout', (req, res) => {
-  req.session.destroy(err => {
-      if(err) {
-          console.log(err);
-          res.status(500).render('errors/base', {error: err})
-      } else res.redirect('/session/login')
-  })
-})
+sessionsRouter.get('/logout', sessionLogoutController)
 
-sessionsRouter.get('/user/getpreference', (req, res) => {
+sessionsRouter.get('/current', (req, res) => {
   const preference = req.session.user
-  res.json(preference.location)
+  res.json(preference)
+  console.log(preference);
 })
-
-
 
 export default sessionsRouter

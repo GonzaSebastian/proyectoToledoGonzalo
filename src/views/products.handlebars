@@ -35,10 +35,10 @@
 
 <script>
   function logout() {
-    window.location.href = "/session/logout";
+    window.location.href = "/api/session/logout";
   }
   addProductToCart = (pid) => {
-  fetch(`/api/carts/64e583be7c694136370603ea/products/${pid}`, {
+  fetch(`/api/carts/64ed569e4f1e1653b6803fbc/products/${pid}`, {
     method: 'post',
   })
   .then(result => {
