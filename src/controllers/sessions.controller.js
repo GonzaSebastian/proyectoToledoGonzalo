@@ -1,5 +1,4 @@
-import { ProductService } from "../services/index.js";
-import passport from "passport";
+import { UserService } from "../services/index.js"
 
 export const sessionRootController = (req, res) => res.json({status: 'success', message: 'Route /sessions'})
 
@@ -18,4 +17,10 @@ export const sessionLogoutController = (req, res) => {
           res.status(500).render('errors/base', {error: err})
       } else res.redirect('/api/session/login')
   })
+}
+
+export const sessionCurrentController = async(req, res) => {
+  const preference = await UserService.getUser(req.session?.passport?.user)
+  res.json({status: 'success', payload: preference})
+  console.log(preference);
 }

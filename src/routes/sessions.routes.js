@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { sessionFailLoginController, sessionFailRegister, sessionLoginController, sessionLogoutController, sessionRegisterController, sessionRootController } from "../controllers/sessions.controller.js";
+import { sessionCurrentController, sessionFailLoginController, sessionFailRegister, sessionLoginController, sessionLogoutController, sessionRegisterController, sessionRootController } from "../controllers/sessions.controller.js";
 
 const sessionsRouter = Router()
 
@@ -28,10 +28,6 @@ sessionsRouter.get('/githubLog', passport.authenticate('github', {successRedirec
 // LOGOUT
 sessionsRouter.get('/logout', sessionLogoutController)
 
-sessionsRouter.get('/current', (req, res) => {
-  const preference = req.session.user
-  res.json(preference)
-  console.log(preference);
-})
+sessionsRouter.get('/current', sessionCurrentController)
 
 export default sessionsRouter

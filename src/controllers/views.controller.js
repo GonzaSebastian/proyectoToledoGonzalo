@@ -1,13 +1,12 @@
-import userModel from "../models/user.model.js"
 import { getCartByIdController } from "../controllers/cart.controller.js";
-import { ProductService } from "../services/index.js";
+import { ProductService, UserService } from "../services/index.js";
 
 // VIEW PRODUCTS ECOMMERCE
 export const viewsGetProducts = async (req, res) => {
   try {
     const result = (await ProductService.getAllPaginate(req, res)).response
     
-    const user = await userModel.findById(req.session?.passport?.user).lean().exec();
+    const user = await UserService.getUser(req.session?.passport?.user)
   
     res.render("products", {
       title: "Productos",
@@ -25,7 +24,7 @@ export const viewsGetProductsRealTime = async(req, res) => {
   try {
     const result = (await ProductService.getAllPaginate(req, res)).response
     
-    const user = await userModel.findById(req.session?.passport?.user).lean().exec();
+    const user = await UserService.getUser(req.session?.passport?.user)
 
     res.render("realTimeProducts", {
       title: "Productos RealTime",

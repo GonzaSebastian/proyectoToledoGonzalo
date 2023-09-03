@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { viewsGetProducts, viewsGetProductsRealTime, viewsCart } from "../controllers/views.controller.js";
+import { publicRoutes } from "../middlewares/auth.middleware.js";
 
 const viewsRouter = Router()
 
-viewsRouter.get("/", viewsGetProducts)
+viewsRouter.get("/", publicRoutes, viewsGetProducts)
 
 viewsRouter.get("/realtimeproducts", viewsGetProductsRealTime)
 
