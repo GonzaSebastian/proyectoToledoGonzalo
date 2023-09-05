@@ -8,6 +8,6 @@ viewsRouter.get("/", publicRoutes, viewsGetProducts)
 
 viewsRouter.get("/realtimeproducts", viewsGetProductsRealTime)
 
-viewsRouter.get("/cart/:cid", viewsCart)
+viewsRouter.get("/cart/", viewsCart)
 
 export default viewsRouter

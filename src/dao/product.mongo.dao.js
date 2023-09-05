@@ -54,5 +54,11 @@ export default class productDAO {
     })
     return dataUpdate
   }
+  updateStock = async(id, data) => {
+    const dataUpdate = await productModel.updateOne({_id : id}, {
+      stock: data.stock
+    })
+    return dataUpdate
+  }
   delete = async(id) => await productModel.deleteOne({_id : id})
 }

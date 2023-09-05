@@ -1,4 +1,4 @@
-<h1>Bienvenido {{user.first_name}}</h1>
+<h1>Bienvenido {{user.first_name}} {{user.cart}}</h1>
 <h2>Products</h2>
 <hr />
 <table class="table table-striped">
@@ -19,7 +19,7 @@
       <td>{{this.price}}</td>
       <td>{{this.code}}</td>
       <td>{{this.stock}}</td>
-      <td><button class="btn btn-primary" onclick="addProductToCart(`{{this._id}}`)">Agregar al carrito</button></td> 
+      <td><button class="btn btn-primary" onclick="addProductToCart('{{this._id}}','{{../user.cart}}')">Agregar al carrito</button></td> 
     </tr>
   {{/each}}
 </table>
@@ -33,16 +33,18 @@
 </div>
 <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
 
+
 <script>
   function logout() {
     window.location.href = "/api/session/logout";
   }
-  addProductToCart = (pid) => {
-  fetch(`/api/carts/64ed569e4f1e1653b6803fbc/products/${pid}`, {
-    method: 'post',
-  })
-  .then(result => {
+  
+  addProductToCart = (pid, cid) => {
+    fetch(`/api/carts/${cid}/products/${pid}`, {
+      method: 'post',
+    })
+    .then(result => {
     if(result.status === 'error') throw new Error(result.error)
-  })
-}
+    })
+  }
 </script>

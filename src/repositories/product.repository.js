@@ -8,5 +8,6 @@ export default class ProductRepository {
   getById = async(id) => await this.dao.getById(id)
   create = async(data) => await this.dao.create(data)
   update = async(id, data) => await this.dao.update(id, data)
+  updateStock = async(id, data) => await this.dao.updateStock(id, data)
   delete = async(id) => await this.dao.delete(id)
 }

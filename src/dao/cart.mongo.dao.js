@@ -1,4 +1,5 @@
 import { cartModel } from '../models/cart.model.js'
+import ticketModel from '../models/ticket.model.js'
 
 export default class cartDAO {
   getAll = async() => await cartModel.find()
@@ -22,16 +23,9 @@ export default class cartDAO {
 
     return cart
   }
-  deleteToCart = async(req) => {
-    const cart = await cartModel.findOne({_id: req.params.cid})
-    const productsFilter = cart.products.findIndex(i => i.product.toString() == req.params.pid)
-    if (cart && productsFilter !== -1) {
-      cart.products.splice(productsFilter, 1)
-      await cartModel.updateOne({_id: req.params.cid}, cart)
-      return cart
-    } else {
-      return null
-    }
+  updateCartUser = async(user) => {
+    const cartId = user.cart
+    await cartModel.updateOne({_id : cartId}, {user: user._id})
   }
   emptyCart = async(id) => {
     const cart = await cartModel.findOne({_id: id})
@@ -53,4 +47,5 @@ export default class cartDAO {
 
     return cart
   }
+  createPurchase = async (ticket) => await ticketModel.create(ticket)
 }

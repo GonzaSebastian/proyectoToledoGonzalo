@@ -3,6 +3,7 @@ import GitHubStrategy from "passport-github2"
 import local from "passport-local"
 import UserModel from "../models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
+import { CartService, UserService } from "../services/index.js";
 
 const LocalStrategy = local.Strategy
 
@@ -16,14 +17,15 @@ const initializePassport = () => {
   }, async (accesToken, refreshToken, profile, done) => {
     console.log(profile);
     try {
-      const user = await UserModel.findOne({ email: profile._json.email })
+      const user = await UserService.getUserFindOne({ email: profile._json.email })
       if (user) return done(null, user)
-      const newUser = await UserModel.create({
+      const newUser = await UserService.createUser({
         first_name: profile._json.name,
         last_name: profile._json.name,
         age: 0,
         email: profile._json.email,
         password: " ",
+        // cart: CartService.create()
       })
       if ( newUser.email == 'adminCoder@coder.com' ) {
         newUser.role = 'admin'
@@ -40,19 +42,21 @@ const initializePassport = () => {
   }, async(req, username, password, done) => {
     const {first_name, last_name, age, email} = req.body
     try {
-      const user = await UserModel.findOne({email: username})
+      const user = await UserService.getUserFindOne({email: username})
       if (user) {
         console.log('User already exist');
         return done(null, false)
       }
+      const cart = await CartService.create()
+      const cartId = cart._id
       const newUser = {
-        first_name, last_name, email, age, password: createHash(password)
+        first_name, last_name, email, age, password: createHash(password), cart: cartId
       }
       if ( newUser.email == 'adminCoder@coder.com' && isValidPassword(newUser, 'admin' )) {
         newUser.role = 'admin'
       }
       
-      const result = await UserModel.create(newUser)
+      const result = await UserService.createUser(newUser)
       return done(null, result)
     } catch(err) {
       return done('Error get user')
@@ -63,7 +67,8 @@ const initializePassport = () => {
     usernameField: 'email'
   }, async(username, password, done) => {
     try {
-      const user = await UserModel.findOne({ email: username })
+      const user = await UserService.getUserFindOne({ email: username })
+      await CartService.updateCartUser(user)
       if(!user) {
         return done(null, false)
       }
@@ -79,7 +84,7 @@ const initializePassport = () => {
 })
 
   passport.deserializeUser(async (id, done) => {
-    const user = await UserModel.findById(id)
+    const user = await UserService.getUser(id)
     done(null, user)
   })
 }

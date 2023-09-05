@@ -38,7 +38,8 @@ export const viewsGetProductsRealTime = async(req, res) => {
 
 // VIEW CART USER
 export const viewsCart = async(req, res) => {
-  const cartId = req.params.cid
+  const user = await UserService.getUser(req.session?.passport?.user)
+  const cartId = user.cart
   
   try {
     let cartView = await getCartByIdController(cartId)
