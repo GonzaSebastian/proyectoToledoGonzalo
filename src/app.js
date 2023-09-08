@@ -3,6 +3,7 @@ import productRouter from "./routes/products.routes.js"
 import cartsRouter from "./routes/carts.routes.js"
 import viewsRouter from "./routes/views.router.js"
 import sessionsRouter from "./routes/sessions.routes.js"
+import mockingRouter from "./routes/mocking.routes.js"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io"
 import mongoose from "mongoose"
@@ -68,6 +69,7 @@ app.use('/products', viewsRouter)
 app.use("/api/products", productRouter)
 app.use("/api/carts", cartsRouter)
 app.use('/api/session', sessionsRouter)
+app.use('/api/mockingproducts', mockingRouter)
 
 
 // SOCKET CONECTION
