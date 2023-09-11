@@ -29,16 +29,21 @@ export default class productDAO {
       return {status: 404, response: err}
     }
   }
+
   getById = async(id) => await productModel.findById(id)
-  create = async(data) => await productModel.create({
-    title: data.title,
-    description: data.description,
-    Category: data.category,
-    thumbnail: data.thumbnail,
-    price: data.price,
-    code: data.code,
-    stock: data.stock
-  })
+
+  create = async(data) => {
+    await productModel.create({
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      thumbnail: data.thumbnail,
+      price: data.price,
+      code: data.code,
+      stock: data.stock      
+    })
+  }
+
   update = async(req) => {
     let id = req.params.pid
     let data = req.body

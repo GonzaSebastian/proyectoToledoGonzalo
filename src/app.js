@@ -13,8 +13,10 @@ import __dirname from "./utils.js"
 import passport from "passport"
 import initializePassport from "./config/passport.config.js"
 import { PORT, MONGO_URI, MONGO_DB_NAME, SECRET_PASS } from "./config/config.js"
+import errorMidleware from "./middlewares/error.midleware.js"
 
 const app = express()
+
 let io = undefined
 let serverHTTP = undefined
 
@@ -28,6 +30,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 app.use(express.static(__dirname + '/public'))
+
+
 
 // MONGOOSE CONECTION
 try {
@@ -71,6 +75,8 @@ app.use("/api/carts", cartsRouter)
 app.use('/api/session', sessionsRouter)
 app.use('/api/mockingproducts', mockingRouter)
 
+// ERROR MIDLEWARE
+app.use(errorMidleware)
 
 // SOCKET CONECTION
 io.on('connection', socket  => {
