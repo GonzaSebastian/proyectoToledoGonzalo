@@ -4,6 +4,7 @@ import cartsRouter from "./routes/carts.routes.js"
 import viewsRouter from "./routes/views.router.js"
 import sessionsRouter from "./routes/sessions.routes.js"
 import mockingRouter from "./routes/mocking.routes.js"
+import loggerTestRouter from "./routes/logger.routes.js"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io"
 import mongoose from "mongoose"
@@ -14,6 +15,7 @@ import passport from "passport"
 import initializePassport from "./config/passport.config.js"
 import { PORT, MONGO_URI, MONGO_DB_NAME, SECRET_PASS } from "./config/config.js"
 import errorMidleware from "./middlewares/error.midleware.js"
+import logger from "./logger.js"
 
 const app = express()
 
@@ -24,6 +26,7 @@ app.use((req, res, next) => {
   req.io = io 
   next()
 })
+
 
 // EXPRESS
 app.use(express.json())
@@ -36,11 +39,10 @@ app.use(express.static(__dirname + '/public'))
 // MONGOOSE CONECTION
 try {
   await mongoose.connect(`${MONGO_URI}${MONGO_DB_NAME}`)
-  serverHTTP = app.listen(PORT, () => console.log(`Server Up ${PORT}`))
+  serverHTTP = app.listen(PORT, () => logger.info(`Server Up ${PORT}`))
   io = new Server(serverHTTP)
-
 } catch(err) {
-  console.log(err);
+  logger.error(err);
 }
 
 // CONFIG SESSIONS
@@ -75,15 +77,21 @@ app.use("/api/carts", cartsRouter)
 app.use('/api/session', sessionsRouter)
 app.use('/api/mockingproducts', mockingRouter)
 
+app.use('/api/loggerTest', loggerTestRouter)
+
+
 // ERROR MIDLEWARE
 app.use(errorMidleware)
 
 // SOCKET CONECTION
-io.on('connection', socket  => {
-  console.log("New client connected");
-  socket.on('productList', data => {
-    io.emit('updateProducts', data.docs)
+if (serverHTTP){
+  io.on('connection', socket  => {
+    logger.info("New client connected");
+    socket.on('productList', data => {
+      io.emit('updateProducts', data.docs)
+    })
   })
-})
+}
+
 
 

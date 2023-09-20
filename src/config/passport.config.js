@@ -1,9 +1,9 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2"
 import local from "passport-local"
-import UserModel from "../models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
 import { CartService, UserService } from "../services/index.js";
+import logger from "../logger.js";
 
 const LocalStrategy = local.Strategy
 
@@ -15,21 +15,24 @@ const initializePassport = () => {
     clientSecret: '495ed70b268f0926f573189e5bb903ac4e81c0ef',
     callbackURL: 'http://localhost:8080/api/session/githubLog'
   }, async (accesToken, refreshToken, profile, done) => {
-    console.log(profile);
     try {
       const user = await UserService.getUserFindOne({ email: profile._json.email })
-      if (user) return done(null, user)
+      if (user) {
+        logger.warning(`User ${username} already exist`)
+        return done(null, user)
+      } 
       const newUser = await UserService.createUser({
         first_name: profile._json.name,
         last_name: profile._json.name,
         age: 0,
         email: profile._json.email,
         password: " ",
-        // cart: CartService.create()
+        cart: await CartService.create()
       })
       if ( newUser.email == 'adminCoder@coder.com' ) {
         newUser.role = 'admin'
       }
+      logger.info('A new user has been created successfully and logged in through GitHub.')
       return done(null, newUser)
     } catch(err) {
       return done(`Error to login with Github =>${err.message}`)
@@ -44,7 +47,7 @@ const initializePassport = () => {
     try {
       const user = await UserService.getUserFindOne({email: username})
       if (user) {
-        console.log('User already exist');
+        logger.warning(`User ${username} already exist`);
         return done(null, false)
       }
       const cart = await CartService.create()
@@ -57,6 +60,7 @@ const initializePassport = () => {
       }
       
       const result = await UserService.createUser(newUser)
+      logger.info('A new user has been created successfully.')
       return done(null, result)
     } catch(err) {
       return done('Error get user')

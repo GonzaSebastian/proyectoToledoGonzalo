@@ -1,4 +1,5 @@
 import { UserService } from "../services/index.js"
+import logger from "../logger.js"
 
 export const sessionRootController = (req, res) => res.json({status: 'success', message: 'Route /sessions'})
 
@@ -13,7 +14,7 @@ export const sessionFailLoginController = (req, res) => res.send({error:'fail lo
 export const sessionLogoutController = (req, res) => {
   req.session.destroy(err => {
       if(err) {
-          console.log(err);
+          logger.error(`from session destroy-${err}`);
           res.status(500).render('errors/base', {error: err})
       } else res.redirect('/api/session/login')
   })
@@ -22,5 +23,4 @@ export const sessionLogoutController = (req, res) => {
 export const sessionCurrentController = async(req, res) => {
   const preference = await UserService.getUser(req.session?.passport?.user)
   res.json({status: 'success', payload: preference})
-  console.log(preference);
 }

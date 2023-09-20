@@ -1,5 +1,6 @@
 import { cartModel } from '../models/cart.model.js'
 import ticketModel from '../models/ticket.model.js'
+import logger from '../logger.js'
 
 export default class cartDAO {
   getAll = async() => await cartModel.find()
@@ -40,7 +41,7 @@ export default class cartDAO {
     let newQuantity = req.body.quantity
 
     const cart = await cartModel.findOne({_id: cartId})
-    if (!cart) return console.error(err.message)
+    if (!cart) return logger.error(err.message)
     const productIndex = cart.products.findIndex(i => i.product.toString() == productId)
     cart.products[productIndex].quantity = newQuantity 
     await cartModel.updateOne({_id: cartId}, cart)
