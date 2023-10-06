@@ -16,6 +16,8 @@ import initializePassport from "./config/passport.config.js"
 import { PORT, MONGO_URI, MONGO_DB_NAME, SECRET_PASS } from "./config/config.js"
 import errorMidleware from "./middlewares/error.midleware.js"
 import logger from "./logger.js"
+import swaggerJSDoc from "swagger-jsdoc"
+import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express()
 
@@ -44,6 +46,20 @@ try {
 } catch(err) {
   logger.error(err);
 }
+
+// CONFIG SWAGGER
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentation for backend project Toledos API',
+      description: 'Aqui va la descripcion'
+    }
+  },
+  apis: ['./docs/**/*.yaml']
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 // CONFIG SESSIONS
 app.use(session({
