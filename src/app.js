@@ -7,6 +7,7 @@ import mockingRouter from "./routes/mocking.routes.js"
 import loggerTestRouter from "./routes/logger.routes.js"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io"
+import { socketConnection } from "./socketConnection.js"
 import mongoose from "mongoose"
 import session from "express-session";
 import MongoStore from "connect-mongo"
@@ -21,7 +22,7 @@ import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express()
 
-let io = undefined
+export let io = undefined
 let serverHTTP = undefined
 
 app.use((req, res, next) => {
@@ -101,12 +102,13 @@ app.use(errorMidleware)
 
 // SOCKET CONECTION
 if (serverHTTP){
-  io.on('connection', socket  => {
-    logger.info("New client connected");
-    socket.on('productList', data => {
-      io.emit('updateProducts', data.docs)
-    })
-  })
+  // io.on('connection', socket  => {
+  //   logger.info("New client connected");
+  //   socket.on('productList', data => {
+  //     io.emit('updateProducts', data.docs)
+  //   })
+  // })
+  socketConnection()
 }
 
 

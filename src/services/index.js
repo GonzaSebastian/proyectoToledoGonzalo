@@ -6,9 +6,12 @@ import UserRepository from "../repositories/user.repository.js";
 import userDAO from "../dao/user.mongo.dao.js";
 import mockingDAO from "../dao/mocking.faker.dao.js";
 import MockingRepository from "../repositories/mocking.repository.js";
+import chatDAO from "../dao/chat.mongo.dao.js";
+import ChatRepository from "../repositories/chat.repository.js";
 
 
 export const ProductService = new ProductRepository(new productDAO)
 export const CartService = new CartRepository(new cartDAO)
 export const UserService = new UserRepository(new userDAO)
 export const MockingService = new MockingRepository(new mockingDAO)
+export const ChatService = new ChatRepository(new chatDAO)

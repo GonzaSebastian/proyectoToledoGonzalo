@@ -1,5 +1,5 @@
 import { getCartByIdController } from "../controllers/cart.controller.js";
-import { ProductService, UserService } from "../services/index.js";
+import { ProductService, UserService, ChatService } from "../services/index.js";
 
 // VIEW PRODUCTS ECOMMERCE
 export const viewsGetProducts = async (req, res) => {
@@ -52,3 +52,15 @@ export const viewsCart = async(req, res) => {
     res.status(404).json({ status: 'error', error: err.message })
   }
 }
+
+export const chatViewController = async (req, res) => {
+  try {
+    const user = req.user
+
+    const messages = await ChatService.getMessages()
+    res.render("chat", { user, messages });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error });
+  }
+};
