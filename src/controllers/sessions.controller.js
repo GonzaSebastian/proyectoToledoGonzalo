@@ -1,6 +1,7 @@
 import { UserService } from "../services/index.js"
 import logger from "../logger.js"
 
+
 export const sessionRootController = (req, res) => res.json({status: 'success', message: 'Route /sessions'})
 
 export const sessionRegisterController = (req, res) => res.render('session/register')
@@ -23,4 +24,13 @@ export const sessionLogoutController = (req, res) => {
 export const sessionCurrentController = async(req, res) => {
   const preference = await UserService.getUser(req.session?.passport?.user)
   res.json({status: 'success', payload: preference})
+}
+
+export const passportLoginController = async(req, res) => {
+  const user = await UserService.getUser(req.session?.passport?.user)
+
+  if (user.role === 'ADMIN'){
+    res.redirect('./products/realtimeproducts')
+  }
+  res.redirect('/products')
 }

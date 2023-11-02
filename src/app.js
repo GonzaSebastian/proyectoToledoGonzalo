@@ -100,14 +100,8 @@ app.use('/api/loggerTest', loggerTestRouter)
 // ERROR MIDLEWARE
 app.use(errorMidleware)
 
-// SOCKET CONECTION
+// SOCKET CONNECTION
 if (serverHTTP){
-  // io.on('connection', socket  => {
-  //   logger.info("New client connected");
-  //   socket.on('productList', data => {
-  //     io.emit('updateProducts', data.docs)
-  //   })
-  // })
   socketConnection()
 }
 

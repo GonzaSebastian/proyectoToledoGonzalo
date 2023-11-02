@@ -54,6 +54,10 @@ deleteProduct = (id) => {
   .catch(err => alert(`Ocurrio un error: ${err}`))
 }
 
+logout =() => {
+  window.location.href = "/api/session/logout";
+}
+
 socket.on('updateProducts', data => {
   table.innerHTML = 
     `<tr>

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { sessionCurrentController, sessionFailLoginController, sessionFailRegister, sessionLoginController, sessionLogoutController, sessionRegisterController, sessionRootController } from "../controllers/sessions.controller.js";
+import { passportLoginController, sessionCurrentController, sessionFailLoginController, sessionFailRegister, sessionLoginController, sessionLogoutController, sessionRegisterController, sessionRootController } from "../controllers/sessions.controller.js";
 
 const sessionsRouter = Router()
 
@@ -17,7 +17,9 @@ sessionsRouter.get('/failRegister', sessionFailRegister)
 sessionsRouter.get('/login', sessionLoginController)
 
 // API LOGIN
-sessionsRouter.post('/login', passport.authenticate('login', {successRedirect: '/products', failureRedirect: '/session/failLogin'}))
+sessionsRouter.post('/login', passport.authenticate('login', {failureRedirect: '/session/failLogin'}))
+
+sessionsRouter.post('/login', passportLoginController)
 
 sessionsRouter.get('/failLogin', sessionFailLoginController)
 

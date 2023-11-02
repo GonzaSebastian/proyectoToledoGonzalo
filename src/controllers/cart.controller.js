@@ -63,7 +63,6 @@ import { generateUniqueCode } from "../utils.js"
   }
 
   export const purchaseCartController = async (req, res) => {
-
     const cart = await CartService.getById(req.params.cid)
     const user = await UserService.getUser(cart.user)
 

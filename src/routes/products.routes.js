@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { getProductsController, getProductByIdController, addProductController, deleteProductController, updateProductController} from "../controllers/product.controller.js";
+import { handlePolicies } from "../middlewares/auth.middleware.js";
 
 const productRouter = Router()
 
-productRouter.get('/', getProductsController)
+productRouter.get('/', handlePolicies(["ADMIN", "USER", "PUBLIC"]), getProductsController)
 
-productRouter.get("/:pid", getProductByIdController)
+productRouter.get("/:pid", handlePolicies(["ADMIN", "USER", "PUBLIC"]), getProductByIdController)
 
-productRouter.post("/", addProductController)
+productRouter.post("/", handlePolicies(["ADMIN"]), addProductController)
 
-productRouter.delete("/:pid", deleteProductController)
+productRouter.delete("/:pid", handlePolicies(["ADMIN"]), deleteProductController)
 
-productRouter.put("/:pid", updateProductController)
+productRouter.put("/:pid", handlePolicies(["ADMIN"]), updateProductController)
 
 export default productRouter
