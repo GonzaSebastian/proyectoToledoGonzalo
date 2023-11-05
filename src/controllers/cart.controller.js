@@ -1,5 +1,6 @@
 import { CartService, ProductService, UserService } from "../services/index.js"
 import { generateUniqueCode } from "../utils.js"
+import { getBill } from "../services/nodemailer.js"
 
   export const getCartController = async (req, res) => {
     try {
@@ -63,8 +64,15 @@ import { generateUniqueCode } from "../utils.js"
   }
 
   export const purchaseCartController = async (req, res) => {
-    const cart = await CartService.getById(req.params.cid)
-    const user = await UserService.getUser(cart.user)
+    const cart = await CartService.getById(req.params.cid)  
+    // const user = await UserService.getUser(cart.user)
+    const user = {
+      first_name: 'Florencia',
+      last_name: 'Coelho',
+      email: 'florenciascoelho@gmail.com',
+      cart: '65469559db67f115c70ce227'
+    }
+
 
     if (!cart) return res.sendRequestError(`The cart with id ${cid} does not exist`);
 
@@ -116,6 +124,7 @@ import { generateUniqueCode } from "../utils.js"
         }
         const saveTicket = await CartService.createPurchase(newTicket)
 
+        await getBill(saveTicket, user)
         // FILTER PRODUCT NOT STOCK
         // cart.products = cart.products.filter(
         //   (item) =>
