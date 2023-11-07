@@ -1,7 +1,10 @@
-import { NODEMAILER_PASS, NODEMAILER_USER } from '../config/config.js'
+import { NODEMAILER_PASS, NODEMAILER_USER, PORT } from '../config/config.js'
 import nodemailer from 'nodemailer'
 import logger from '../logger.js'
 import ticketModel from '../models/ticket.model.js';
+import { generateUniqueCode } from '../utils.js';
+import UserPasswordModel from '../models/password.model.js';
+
 
 export const getBill = async(saveTicket, user) => {
   try {
@@ -44,4 +47,24 @@ export const getBill = async(saveTicket, user) => {
   } catch (err) {
     logger.error(err)
   }
+}
+
+export const resetPass = async(email, req) => {
+  const token = generateUniqueCode(10)
+  await UserPasswordModel.create({ email, token })
+
+  const mailerConfig = { 
+    service: 'gmail',
+    auth: { user: NODEMAILER_USER, pass: NODEMAILER_PASS }
+   }
+   let transporter = nodemailer.createTransport(mailerConfig)
+   let message = {
+    from: NODEMAILER_USER,
+    to: email,
+    subject: 'Ecommerce - Reestablecer contraseña',
+    html: `<h1>Reestablezca su contraseña </h1> <hr /> Para cambiar su contraseña, haga click a continuacion: 
+    <a href="http://${req.hostname}:${PORT}/api/session/reset-pass/${token}">Nueva contraseña</a> `
+   }
+   await transporter.sendMail(message)
+
 }

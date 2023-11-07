@@ -1,5 +1,9 @@
 import { UserService } from "../services/index.js"
 import logger from "../logger.js"
+import UserModel from "../models/user.model.js"
+import { resetPass } from "../services/nodemailer.js"
+import UserPasswordModel from "../models/password.model.js"
+import { createHash } from "../utils.js"
 
 
 export const sessionRootController = (req, res) => res.json({status: 'success', message: 'Route /sessions'})
@@ -34,3 +38,51 @@ export const passportLoginController = async(req, res) => {
   }
   res.redirect('/products')
 }
+
+export const forgetPasswordViewController = (req, res) => {
+  res.render('session/forget-pass')
+}
+
+export const forgetPasswordController = async (req, res) => {
+  const email = req.body.email
+  const user = await UserModel.findOne({ email })
+  if(!user) {
+    return res.status(400).json({ status: 'error', error: 'user not found' })
+  }
+  try {
+    await resetPass(email, req)
+    // res.json({ stauts: 'success', message: `Your email has successfully sent to ${email} in order to reset password` })
+    res.status(200).redirect('/api/session/login')
+   } catch (err) {
+    res.status(500).json({ status: 'error', error: err.message })
+   }
+}
+
+export const resetPasswordViewController = (req, res) => {
+  res.redirect(`/api/session/verify-token/${req.params.token}`)
+}
+
+export const verifyTokenController = async (req, res) => {
+  const userPassword = await UserPasswordModel.findOne({ token: req.params.token })
+  if(!userPassword) {
+    return res.status(404).json({ status: 'error', error: 'Invalid token / the token has expired' })
+  }
+  const user = userPassword.email
+  res.render('session/reset-pass', { user })
+}
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.params.user })
+    await UserModel.findByIdAndUpdate(user._id, { password: createHash(req.body.newPassword) })
+    res.json({ status: 'success', message: 'se ha creado una nueva contraseña' })
+    await UserPasswordModel.deleteOne({ email: req.params.user })
+  } catch (err) {
+    res.json({ status: 'error', error: err.message })
+  }
+}
+
+
+
+
+
