@@ -6,7 +6,7 @@ export const viewsGetProducts = async (req, res) => {
   try {
     const result = (await ProductService.getAllPaginate(req, res)).response
     
-    const user = await UserService.getUser(req.session?.passport?.user)
+    const user = await UserService.getUserById(req.session?.passport?.user)
   
     res.render("products", {
       title: "Productos",
@@ -24,7 +24,7 @@ export const viewsGetProductsRealTime = async(req, res) => {
   try {
     const result = (await ProductService.getAllPaginate(req, res)).response
     
-    const user = await UserService.getUser(req.session?.passport?.user)
+    const user = await UserService.getUserById(req.session?.passport?.user)
 
     res.render("realTimeProducts", {
       title: "Productos RealTime",
@@ -38,7 +38,7 @@ export const viewsGetProductsRealTime = async(req, res) => {
 
 // VIEW CART USER
 export const viewsCart = async(req, res) => {
-  const user = await UserService.getUser(req.session?.passport?.user)
+  const user = await UserService.getUserById(req.session?.passport?.user)
   const cartId = user.cart
   
   try {

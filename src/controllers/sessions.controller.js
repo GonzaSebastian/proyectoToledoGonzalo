@@ -1,9 +1,9 @@
 import { UserService } from "../services/index.js"
 import logger from "../logger.js"
-import UserModel from "../models/user.model.js"
 import { resetPass } from "../services/nodemailer.js"
 import UserPasswordModel from "../models/password.model.js"
 import { createHash } from "../utils.js"
+import UserDTO from "../dto/user.dto.js"
 
 
 export const sessionRootController = (req, res) => res.json({status: 'success', message: 'Route /sessions'})
@@ -26,12 +26,17 @@ export const sessionLogoutController = (req, res) => {
 }
 
 export const sessionCurrentController = async(req, res) => {
-  const preference = await UserService.getUser(req.session?.passport?.user)
+  const preference = new UserDTO(req.session?.passport?.user)
   res.json({status: 'success', payload: preference})
 }
 
 export const passportLoginController = async(req, res) => {
-  const user = await UserService.getUser(req.session?.passport?.user)
+  const user = await UserService.getUserById(req.session?.passport?.user)
+
+  if (user){
+    user.last_connection = new Date()
+    UserService.findAndUpdate(user._id, user)
+  }
 
   if (user.role === 'ADMIN'){
     res.redirect('./products/realtimeproducts')
@@ -45,7 +50,7 @@ export const forgetPasswordViewController = (req, res) => {
 
 export const forgetPasswordController = async (req, res) => {
   const email = req.body.email
-  const user = await UserModel.findOne({ email })
+  const user = await UserService.getUserFindOne({ email })
   if(!user) {
     return res.status(400).json({ status: 'error', error: 'user not found' })
   }
@@ -73,8 +78,8 @@ export const verifyTokenController = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.params.user })
-    await UserModel.findByIdAndUpdate(user._id, { password: createHash(req.body.newPassword) })
+    const user = await UserService.getUserFindOne({ email: req.params.user })
+    await UserService.findAndUpdate(user._id, { password: createHash(req.body.newPassword) })
     res.json({ status: 'success', message: 'se ha creado una nueva contraseña' })
     await UserPasswordModel.deleteOne({ email: req.params.user })
   } catch (err) {

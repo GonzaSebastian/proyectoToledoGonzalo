@@ -53,11 +53,11 @@ export const resetPass = async(email, req) => {
   const token = generateUniqueCode(10)
   await UserPasswordModel.create({ email, token })
 
-  const mailerConfig = { 
+  const config = { 
     service: 'gmail',
     auth: { user: NODEMAILER_USER, pass: NODEMAILER_PASS }
    }
-   let transporter = nodemailer.createTransport(mailerConfig)
+   let transporter = nodemailer.createTransport(config)
    let message = {
     from: NODEMAILER_USER,
     to: email,
@@ -66,5 +66,20 @@ export const resetPass = async(email, req) => {
     <a href="http://${req.hostname}:${PORT}/api/session/reset-pass/${token}">Nueva contraseña</a> `
    }
    await transporter.sendMail(message)
+}
 
+export const sendDeletedAccountEmail = async(req, user) => {
+  const config = {
+    service: 'gmail',
+    auth: {user: NODEMAILER_USER, pass: NODEMAILER_PASS}
+  }
+  let transporter = nodemailer.createTransport(config)
+  let message = {
+    from: NODEMAILER_USER,
+    to: user.email,
+    subject: 'Ecommerce - Su cuenta fue removida.',
+    html: `<h5> ${user.first_name} hemos eliminado tu cuenta por inactividad. </h5> <hr /> Para volver a registrarte, hace click a continuacion:
+    <a href="http://${req.hostname}:${PORT}/api/session/register">Registrate</a> `
+  }
+  await transporter.sendMail(message)
 }

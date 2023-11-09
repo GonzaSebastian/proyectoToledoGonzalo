@@ -88,7 +88,7 @@ const initializePassport = () => {
 })
 
   passport.deserializeUser(async (id, done) => {
-    const user = await UserService.getUser(id)
+    const user = await UserService.getUserById(id)
     done(null, user)
   })
 }

@@ -65,14 +65,7 @@ import { getBill } from "../services/nodemailer.js"
 
   export const purchaseCartController = async (req, res) => {
     const cart = await CartService.getById(req.params.cid)  
-    // const user = await UserService.getUser(cart.user)
-    const user = {
-      first_name: 'Florencia',
-      last_name: 'Coelho',
-      email: 'florenciascoelho@gmail.com',
-      cart: '65469559db67f115c70ce227'
-    }
-
+    const user = await UserService.getUserById(cart.user)
 
     if (!cart) return res.sendRequestError(`The cart with id ${cid} does not exist`);
 

@@ -3,7 +3,10 @@ export default class UserRepository {
     this.dao = dao
   }
 
-  getUser = async(id) => await this.dao.getUser(id)
+  getUsers = async(user) => await this.dao.getUsers(user)
+  getUserById = async(id) => await this.dao.getUserById(id)
   getUserFindOne = async(id) => await this.dao.getUserFindOne(id)
   createUser = async(user) => await this.dao.createUser(user)
+  findAndUpdate = async(uid, user) => await this.dao.findAndUpdate(uid, user)
+  deleteUser = async(id) => await this.dao.deleteUser(id)
 }

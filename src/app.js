@@ -19,6 +19,7 @@ import errorMidleware from "./middlewares/error.midleware.js"
 import logger from "./logger.js"
 import swaggerJSDoc from "swagger-jsdoc"
 import swaggerUiExpress from 'swagger-ui-express'
+import UserRouter from "./routes/user.router.js"
 
 const app = express()
 
@@ -93,6 +94,7 @@ app.use("/api/products", productRouter)
 app.use("/api/carts", cartsRouter)
 app.use('/api/session', sessionsRouter)
 app.use('/api/mockingproducts', mockingRouter)
+app.use('/api/user', UserRouter)
 
 app.use('/api/loggerTest', loggerTestRouter)
 
