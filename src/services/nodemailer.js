@@ -83,3 +83,18 @@ export const sendDeletedAccountEmail = async(req, user) => {
   }
   await transporter.sendMail(message)
 }
+
+export const sendDeletedProdPremium = async(req, user) => {
+  const config = {
+    service: 'gmail',
+    auth: {user: NODEMAILER_USER, pass: NODEMAILER_PASS}
+  }
+  let transporter = nodemailer.createTransport(config)
+  let message = {
+    from: NODEMAILER_USER,
+    to: user.email,
+    subject: 'Ecommerce - Un producto fue removido.',
+    html: `<h5> ${user.first_name} se ha eliminado un producto de su tienda. </h5>` 
+  }
+  await transporter.sendMail(message)
+}

@@ -8,7 +8,7 @@ productRouter.get('/', handlePolicies(["ADMIN", "USER", "PREMIUM"]), getProducts
 
 productRouter.get("/:pid", handlePolicies(["ADMIN", "USER", "PREMIUM"]), getProductByIdController)
 
-productRouter.post("/", handlePolicies(["ADMIN"]), addProductController)
+productRouter.post("/", handlePolicies(["ADMIN", "PREMIUM"]), addProductController)
 
 productRouter.delete("/:pid", handlePolicies(["ADMIN"]), deleteProductController)
 

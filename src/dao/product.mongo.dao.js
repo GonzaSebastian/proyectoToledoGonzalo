@@ -40,7 +40,8 @@ export default class productDAO {
       thumbnail: data.thumbnail,
       price: data.price,
       code: data.code,
-      stock: data.stock      
+      stock: data.stock,
+      owner: data.owner      
     })
   }
 

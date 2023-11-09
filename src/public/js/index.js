@@ -6,6 +6,7 @@ document.getElementById('createBtn').addEventListener('click', () => {
   const body = {
     title: document.getElementById('title').value,
     description: document.getElementById('description').value,
+    category: document.getElementById('category').value,
     price: document.getElementById('price').value,
     thumbnail: document.getElementById('thumbnail').value,
     code: document.getElementById('code').value,
@@ -30,6 +31,7 @@ document.getElementById('createBtn').addEventListener('click', () => {
       else socket.emit('productList', result)
       document.getElementById('title').value = ''
       document.getElementById('description').value = ''
+      document.getElementById('category').value = ''
       document.getElementById('price').value = ''
       document.getElementById('thumbnail').value = ''
       document.getElementById('code').value = ''
@@ -64,6 +66,7 @@ socket.on('updateProducts', data => {
       <td></td>
       <td><strong>Producto</strong></td>
       <td><strong>Descripción</strong></td>
+      <td><strong>Categoria</strong></td>
       <td><strong>Precio</strong></td>
       <td><strong>Código</strong></td>
       <td><strong>Stock</strong></td>
@@ -75,6 +78,7 @@ socket.on('updateProducts', data => {
         <td><button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Eliminar</button></td>
         <td>${product.title}</td>
         <td>${product.description}</td>
+        <td>${product.category}</td>
         <td>${product.price}</td>
         <td>${product.code}</td>
         <td>${product.stock}</td>

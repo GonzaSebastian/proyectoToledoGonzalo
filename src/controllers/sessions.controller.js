@@ -38,10 +38,11 @@ export const passportLoginController = async(req, res) => {
     UserService.findAndUpdate(user._id, user)
   }
 
-  if (user.role === 'ADMIN'){
-    res.redirect('./products/realtimeproducts')
+  if (user.role === 'admin'){
+    res.redirect('/products/realtimeproducts')
+  } else {
+    res.redirect('/products')
   }
-  res.redirect('/products')
 }
 
 export const forgetPasswordViewController = (req, res) => {
